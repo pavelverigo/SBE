@@ -1,5 +1,9 @@
 #include "all.h"
+
+#ifndef ZIG_BUILD
 #include "config.h"
+#endif
+
 #include <ctype.h>
 #include <getopt.h>
 
