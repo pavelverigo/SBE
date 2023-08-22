@@ -225,6 +225,12 @@ lex()
 	do
 		c = fgetc(inf);
 	while (isblank(c));
+	if (c == '\r') {
+		c = fgetc(inf);
+		if (c != '\n') {
+			err("CR not in CRLF");
+		}
+	}
 	t = Txxx;
 	tokval.chr = c;
 	switch (c) {
@@ -270,8 +276,15 @@ lex()
 		c = fgetc(inf);
 		goto Alpha;
 	case '#':
-		while ((c=fgetc(inf)) != '\n' && c != EOF)
-			;
+		do {
+			c = fgetc(inf);
+		} while(c != '\n' && c != EOF && c != '\r');
+		if (c == '\r') {
+			c = fgetc(inf);
+			if (c != '\n') {
+				err("CR not in CRLF");
+			}
+		}
 		/* fall through */
 	case '\n':
 		lnum++;
@@ -791,6 +804,7 @@ typecheck(Fn *fn)
 	for (b=fn->start; b; b=b->link) {
 		for (p=b->phi; p; p=p->link)
 			fn->tmp[p->to.val].cls = p->cls;
+		assert(b->ins != NULL);
 		for (i=b->ins; i<&b->ins[b->nins]; i++)
 			if (rtype(i->to) == RTmp) {
 				t = &fn->tmp[i->to.val];
@@ -819,6 +833,7 @@ typecheck(Fn *fn)
 			if (!bsequal(pb, ppb))
 				err("predecessors not matched in phi %%%s", t->name);
 		}
+		assert(b->ins != NULL);
 		for (i=b->ins; i<&b->ins[b->nins]; i++)
 			for (n=0; n<2; n++) {
 				k = optab[i->op].argcls[n][i->cls];

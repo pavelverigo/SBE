@@ -1,6 +1,7 @@
 *.o
 qbe
-qbe.exe
+*.exe
+*.exe.stackdump
 config.h
 .comfile
 *.out
