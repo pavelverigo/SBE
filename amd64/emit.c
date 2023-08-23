@@ -602,7 +602,6 @@ amd64_emitfn(Fn *fn, FILE *f)
 	for (lbl=0, b=fn->start; b; b=b->link) {
 		if (lbl || b->npred > 1)
 			fprintf(f, "%sbb%d:\n", T.asloc, id0+b->id);
-		assert(b->ins != NULL);
 		for (i=b->ins; i!=&b->ins[b->nins]; i++) {
 			emitins(*i, fn, f);
 		}

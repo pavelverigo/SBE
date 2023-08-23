@@ -10,7 +10,8 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
-    exe.addCSourceFiles(&src_files, &[_][]const u8{"-std=c99"});
+    // Code uses &b->ins[b->nins], when b->ins == NULL, this causes sanitizer to catch undefined behaviour
+    exe.addCSourceFiles(&src_files, &[_][]const u8{ "-std=c99", "-fno-sanitize=undefined" });
     exe.linkLibC();
 
     exe.defineCMacro("ZIG_BUILD", "");
