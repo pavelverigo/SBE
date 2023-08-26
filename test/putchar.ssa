@@ -1,0 +1,5 @@
+export function w $main() {
+@start
+  call $putchar(w 97)
+  ret 0
+}

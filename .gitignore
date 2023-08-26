@@ -6,5 +6,7 @@ config.h
 .comfile
 *.out
 
+.vscode
+
 /zig-cache
 /zig-out
